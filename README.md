@@ -7,5 +7,5 @@ to practice and develop my coding skills.
 There is definitely room for improvement, 
 but the code is working and if you are interested
 in making something similar to the example pdf,
-you should have no trouble adapting the code 
-contained in the markdown file to your needs.
+the markdown file has notes to help you adapt
+the code to your specific needs.
