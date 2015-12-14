@@ -1,0 +1,45 @@
+---
+title: "Business card"
+output: html_document
+---
+#Make your own word cloud style business card!
+
+##1. Install and load necessary packages
+```{r}
+install.packages("wordcloud",repos="http://cran.rstudio.com/")
+install.packages("tm",repos="http://cran.rstudio.com/")
+library(wordcloud)
+library(tm)
+```
+##2. Input your info and keywords
+```{r}
+name<-"Martin-Skarzynski,-PhD"
+email<-"skar@mail.nih.gov"
+website<-"www.linkedin.com/in/mskarzynski"
+##add location and other info if your like
+keywords<- c("protein-engineering", "antibody-engineering", "biochemistry", "translational-science", "molecular-modeling", "bioinformatics", "computational-biology", "data-science", "immunotherapy", "cancer-immunology", "oncogenomics", "immunogenomics","protein-purification", "targeted-therapy", "high-throughput-screening", "drug-development", "biotherapeutics", "biotechnology", "biostatistics", "oncoproteomics", "molecular-biology", "cellular-biology")
+```
+##3. Replicate terms to set text size
+```{r}
+n<-nchar(keywords,type="char")
+##I want keyword size to be determined by character length.
+keyRep<- c(rep(name,18), rep(email,19), rep(website,18), rep(keywords,200/n))
+##Adjust the values to suit your needs
+```
+##4. Turn hyphens into spaces
+```{r}
+corpus <- Corpus(VectorSource(keyRep))
+tdm <- TermDocumentMatrix(corpus, control=list(tolower=FALSE))
+m <- as.matrix(tdm)
+v <- sort(rowSums(m), decreasing = TRUE)
+d <- data.frame(word = names(v), freq = v)
+d$word <- gsub("-", " ", d$word)
+```
+##5. Pick your favorite colors and generate wordcloud PDF
+```{r}
+pdf(file="wordcloudBusinessCard.pdf",width=20,height=11)
+wordcloud(d$word, d$freq, min.freq=1, max.words=Inf,random.order=FALSE,random.color=FALSE,colors = c("gold3","red3","seagreen4", "dodgerblue3", "purple4","firebrick3", "darkorange3", "darkgreen","mediumblue","chartreuse4","gray28"), rot.per=0)
+dev.off()
+##You might need to run this last code chunk several times to get the contact info to show up in the right order (hint: words with larger text size tend to show up in the center).
+```
+##Code available at https://github.com/marskar/WordCloudBusinessCard
